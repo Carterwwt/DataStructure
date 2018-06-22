@@ -1,38 +1,52 @@
-
-#include <cstdio>
 #include <iostream>
-
-void Radixsort(char a[][100],int n,int m)
+#include <cstdio>
+#include <cstring>
+#define maxn 100 + 5
+using namespace std;
+int data[maxn];
+int main()
 {
-    int count=0;
-    for(int y=m-1;y>=0;y--)
+    int n;
+    int b[10][1000]={0};
+    int tem[1000];
+    scanf("%d",&n);
+    for(int i = 1;i<=n;scanf("%d",&data[i++]));
+    for(int w = 0;w<3;w++)
     {
-        for(int i=1;i<=n;i++)
+        memset(b,0,sizeof(b));
+        for(int i = 1;i<=n;i++)//分配
         {
-            for(int j=1;j<=n-i;j++)
+            int wt = w;
+            int t1 = 1;
+            while(wt--)
             {
-                if(a[j][y]>a[j+1][y])
-                {
-                    for(int tmp=0;tmp<m;tmp++)a[0][tmp]=a[j][tmp];
-                    for(int tmp=0;tmp<m;tmp++)a[j][tmp]=a[j+1][tmp];
-                    for(int tmp=0;tmp<m;tmp++)a[j+1][tmp]=a[0][tmp];
-                    count=1;
-                }
+                t1*=10;
             }
-            if(count==0){break;}
-            count=0;
+            t1 = data[i]/t1;
+            int t2 = t1%10;
+            int j = 0;
+            while(b[t2][j])
+            {
+                j++;
+            }
+            b[t2][j] = i;
         }
-        for(int tmp=1;tmp<=n;tmp++)printf("%s ",a[tmp]);
+        int next = 1;
+        for(int i = 0;i<=9;i++)
+        {
+            int k = 0;
+            while(b[i][k])
+            {
+                tem[next++] = data[b[i][k]];
+                k++;
+            }
+        }
+        for(int i = 1;i<=n;i++)
+        {
+            printf("%03d ",tem[i]);
+            data[i] = tem[i];
+        }
         printf("\n");
     }
-}
-
-main()
-{
-    char a[1000][100];
-    int n,m;
-    scanf("%d",&n);
-    for(int i=1;i<=n;i++)scanf("%s",&a[i]);
-    for(m=1;a[1][m]!='\0';m++);
-    Radixsort(a,n,m);
+    return 0;
 }

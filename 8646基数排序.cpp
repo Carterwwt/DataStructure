@@ -1,52 +1,46 @@
 #include <iostream>
-#include <cstdio>
 #include <cstring>
-#define maxn 100 + 5
+#include <cmath>
 using namespace std;
-int data[maxn];
-int main()
-{
+#define MAXN 1000
+
+
+int main() {
+    int A[10][MAXN];
+    int data[MAXN] = {0};
+    int sr[MAXN];
     int n;
-    int b[10][1000]={0};
-    int tem[1000];
-    scanf("%d",&n);
-    for(int i = 1;i<=n;scanf("%d",&data[i++]));
-    for(int w = 0;w<3;w++)
-    {
-        memset(b,0,sizeof(b));
-        for(int i = 1;i<=n;i++)//分配
-        {
-            int wt = w;
-            int t1 = 1;
-            while(wt--)
-            {
-                t1*=10;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> data[i];
+    int w = 3;
+    while (w>0) {
+        for(int i=0;i<10;i++)
+            for(int j=0;j<MAXN;j++)
+                A[i][j]=0;
+        for (int i = 0; i < n; i++) {
+            int tw = w, tmp = data[i],result;
+            int power=2;
+            while (tw--) {
+                int a=(int) pow(10,power);
+                result=tmp/a;
+                tmp = tmp%a;
+                power--;
             }
-            t1 = data[i]/t1;
-            int t2 = t1%10;
-            int j = 0;
-            while(b[t2][j])
-            {
-                j++;
-            }
-            b[t2][j] = i;
+            int j;
+            for (j = 0; A[result][j] != 0; j++);
+                A[result][j] = data[i];
         }
-        int next = 1;
-        for(int i = 0;i<=9;i++)
-        {
-            int k = 0;
-            while(b[i][k])
-            {
-                tem[next++] = data[b[i][k]];
-                k++;
-            }
+        int u = 0;
+        for (int j = 0; j < 10; j++) {
+            for (int k = 0; A[j][k] != 0; k++)
+                sr[u++] = A[j][k];
         }
-        for(int i = 1;i<=n;i++)
-        {
-            printf("%03d ",tem[i]);
-            data[i] = tem[i];
+        for (int j = 0; j < n; j++) {
+            cout<<sr[j]<<" ";
+            data[j]=sr[j];
         }
-        printf("\n");
+        cout<<endl;
+        w--;
     }
     return 0;
 }
